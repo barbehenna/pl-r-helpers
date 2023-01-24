@@ -46,9 +46,11 @@ source_and_eval_safe <- function(file, expr, uid=NULL) {
 
     oldmode <- file.mode(file)
     Sys.chmod(file, mode="0664")
-    source(file)
 
-    res <- eval_safe(expr, uid=uid)
+    env <- source_as_uid(file, uid = uid) # built-in eval-safe
+    attach(env)
+    res <- eval(expr)
+
     Sys.chmod(file, mode=oldmode)
 
     res
@@ -75,9 +77,11 @@ source_and_eval_safe_with_hiding <- function(file, expr, uid=NULL, path=NULL) {
 
     oldmode <- file.mode(file)
     Sys.chmod(file, mode="0664")
-    source(file)
 
-    res <- eval_safe(expr, uid=uid)
+    env <- source_as_uid(file, uid = uid) # built-in eval-safe
+    attach(env)
+    res <- eval(expr)
+
     Sys.chmod(file, mode=oldmode)
 
     res
